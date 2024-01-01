@@ -16,10 +16,33 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  final GlobalKey<ScaffoldMessengerState> messengerKey =
+      GlobalKey<ScaffoldMessengerState>();
+
   @override
   void initState() {
     super.initState();
+
+    PushNotifications.messageStream.listen((title) {
+      debugPrint('MY APP MESSAGE......$title');
+      navigatorKey.currentState?.pushNamed('message', arguments: title);
+      final SnackBar snackbar = SnackBar(content: Text('snack....$title'));
+      messengerKey.currentState?.showSnackBar(snackbar);
+    });
+
+    // setState(() {});
   }
+
+  // @override
+  // void didUpdateWidget(MyApp oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   PushNotifications.messageStream.listen((title) {
+  //     setState(() {
+  //       debugPrint('MY APP MESSAGE......$title');
+  //     });
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +50,11 @@ class _MyAppState extends State<MyApp> {
         title: 'Material App',
         debugShowCheckedModeBanner: false,
         initialRoute: 'home',
+        navigatorKey: navigatorKey,
+        scaffoldMessengerKey: messengerKey,
         routes: {
           'home': (BuildContext context) => const HomeScreen(),
-          'message': (BuildContext context) => const HomeScreen(),
+          'message': (BuildContext context) => const MessageScreen(),
         });
   }
 }
