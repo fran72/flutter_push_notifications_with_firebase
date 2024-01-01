@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_16/firebase_options.dart';
 
 class PushNotifications {
-  static FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  static FirebaseMessaging messaging = FirebaseMessaging.instance;
   static String? token;
   static RemoteMessage? initialMessage;
   static final StreamController<String> _messageStream = StreamController();
@@ -34,6 +34,7 @@ class PushNotifications {
   static Future initializeApp() async {
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
+    await requestPermissions();
     initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     token = await FirebaseMessaging.instance.getToken();
     debugPrint('token:........... $token');
@@ -41,6 +42,18 @@ class PushNotifications {
     FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
     FirebaseMessaging.onMessage.listen(_onMessageHandler);
     FirebaseMessaging.onMessageOpenedApp.listen(_onMessageOpenApp);
+  }
+
+  static requestPermissions() async {
+    NotificationSettings settings = await messaging.requestPermission(
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true);
+    debugPrint('permissions status...... ${settings.authorizationStatus}');
   }
 
   static closeStreams() {

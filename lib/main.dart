@@ -34,16 +34,6 @@ class _MyAppState extends State<MyApp> {
     // setState(() {});
   }
 
-  // @override
-  // void didUpdateWidget(MyApp oldWidget) {
-  //   super.didUpdateWidget(oldWidget);
-  //   PushNotifications.messageStream.listen((title) {
-  //     setState(() {
-  //       debugPrint('MY APP MESSAGE......$title');
-  //     });
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
